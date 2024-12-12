@@ -153,6 +153,7 @@ class Products(models.Model):
     is_sale = models.BooleanField(default=False)
     sale_price = models.DecimalField(max_digits=10, decimal_places=0)
     is_suggestion = models.BooleanField(default=False)
+    supplier = models.ForeignKey(Supplier, on_delete=models.CASCADE, null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -201,6 +202,7 @@ class Orders(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     status = models.CharField(max_length=50, choices=STATUS_ORDERS, default='pending')
     shipped =models.BooleanField(default=False)
+    date_shipped = models.DateTimeField(null=True, blank=True)
 
     class Meta:
         db_table = 'orders'

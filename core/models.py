@@ -183,3 +183,26 @@ class Orders(models.Model):
 
     def __str__(self):
         return self.full_name
+
+
+
+
+class OrderItems(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    order = models.ForeignKey(Orders, on_delete=models.CASCADE)
+    product = models.ForeignKey(Products, on_delete=models.CASCADE)
+    price = models.DecimalField(max_digits=10, decimal_places=0)
+    quantity = models.IntegerField()
+
+    class Meta:
+        db_table = 'order_items'
+        verbose_name = 'order item'
+        verbose_name_plural = 'order items'
+
+
+    def __str__(self):
+        return self.order.full_name
+
+
+
+

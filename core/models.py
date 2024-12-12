@@ -8,7 +8,16 @@ from django.utils import timezone
 from ckeditor.fields import RichTextField
 
 
-# Create your models here.
+
+
+STATUS_ORDERS = (
+    ('pending', 'pending'),
+    ('delivered', 'delivered'),
+    ('canceled', 'canceled'),
+)
+
+
+
 
 class UserManager(BaseUserManager):
     def create_user(self, username, phone_number, password=None):
@@ -147,3 +156,30 @@ class Products(models.Model):
 
 
 
+
+class Orders(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    full_name = models.CharField(max_length=100)
+    regex_phone = RegexValidator(
+        regex=r'^09\d{9}$',
+        message='شماره خودرا با فرمت صحیح وارد کنید, با 09 شروع شود و شامل 11 رقم باشد',
+    )
+    phone_number = models.CharField(max_length=11, validators=[regex_phone])
+    city = models.CharField(max_length=50)
+    shipping_address = models.CharField(max_length=1500)
+    postal_code = models.CharField(max_length=100)
+    amount_paid = models.DecimalField(max_digits=10, decimal_places=0)
+    created_at = models.DateTimeField(auto_now_add=True)
+    status = models.CharField(max_length=50, choices=STATUS_ORDERS, default='pending')
+    shipped =models.BooleanField(default=False)
+
+    class Meta:
+        db_table = 'orders'
+        ordering = ['-created_at']
+        get_latest_by = 'created_at'
+        verbose_name = 'order'
+        verbose_name_plural = 'orders'
+
+
+    def __str__(self):
+        return self.full_name

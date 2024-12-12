@@ -111,6 +111,34 @@ class Categories(models.Model):
 
 
 
+class Supplier(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    full_name = models.CharField(max_length=100)
+    city = models.CharField(max_length=100)
+    address = models.CharField(max_length=1500)
+    regex_phone = RegexValidator(
+        regex=r'^09\d{9}$',
+        message='شماره خودرا با فرمت صحیح وارد کنید, با 09 شروع شود و شامل 11 رقم باشد',
+    )
+
+    phone_number = models.CharField(max_length=11, unique=True, validators=[regex_phone])
+    status = models.BooleanField(default=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        verbose_name = 'supplier'
+        verbose_name_plural = 'suppliers'
+        db_table = 'suppliers'
+        ordering = ['-created_at']
+        get_latest_by = 'created_at'
+
+
+    def __str__(self):
+        return self.full_name
+
+
+
 
 class Products(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)

@@ -3,7 +3,9 @@ import uuid
 from django.db import models
 from django.contrib.auth.models import BaseUserManager, AbstractBaseUser, PermissionsMixin
 from django.core.validators import RegexValidator
+from django.template.defaultfilters import slugify
 from django.utils import timezone
+from ckeditor.fields import RichTextField
 
 
 # Create your models here.
@@ -71,6 +73,48 @@ class User(AbstractBaseUser, PermissionsMixin):
         return True
 
 
+
+
+
+class Products(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    name = models.CharField(max_length=100)
+    slug = models.SlugField(max_length=100, unique=True, null=True, blank=True)
+    price = models.DecimalField(max_digits=10, decimal_places=0)
+    description = RichTextField()
+    stock = models.IntegerField()
+    image = models.ImageField(upload_to='products')
+    is_sale = models.BooleanField(default=False)
+    sale_price = models.DecimalField(max_digits=10, decimal_places=0)
+    is_suggestion = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        db_table = 'products'
+        ordering = ['-created_at']
+        get_latest_by = 'created_at'
+        verbose_name = 'product'
+        verbose_name_plural = 'products'
+
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.name, allow_unicode=True)
+        super(Products, self).save(*args, **kwargs)
+
+
+
+    def calculate_discount_percentage(self):
+        if self.is_sale and self.sale_price < self.price:
+            discount = (self.price - self.sale_price) / self.price * 100
+
+            return round(discount, 0)
+
+
+
+    def __str__(self):
+        return self.name
 
 
 

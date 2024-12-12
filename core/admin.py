@@ -1,5 +1,5 @@
 from django.contrib import admin
-from . models import Categories, Supplier, Products, Orders, OrderItems
+from . models import Categories, Supplier, Products, Orders, OrderItems, User
 # Register your models here.
 
 
@@ -7,6 +7,35 @@ from . models import Categories, Supplier, Products, Orders, OrderItems
 class OrderItemsInline(admin.TabularInline):
     model = OrderItems
     extra = 1
+
+
+
+@admin.register(User)
+class UserAdmin(admin.ModelAdmin):
+    list_display = ('username', 'phone_number', 'is_active', 'is_staff', 'is_superuser')
+    list_filter = ('is_active', 'is_staff', 'is_superuser')
+    search_fields = ('username', 'phone_number')
+
+    def has_add_permission(self, request):
+        return request.user.is_superuser
+
+
+    def has_delete_permission(self, request, obj=None):
+        return request.user.is_superuser
+
+
+    def has_change_permission(self, request, obj=None):
+        return request.user.is_superuser
+
+
+    def has_view_permission(self, request, obj=None):
+        return request.user.is_superuser
+
+
+    def has_module_permission(self, request, obj=None):
+        return request.user.is_superuser
+
+
 
 
 @admin.register(Categories)

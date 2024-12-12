@@ -75,6 +75,33 @@ class User(AbstractBaseUser, PermissionsMixin):
 
 
 
+class Categories(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    name = models.CharField(max_length=50, unique=True)
+    slug = models.SlugField(max_length=50, unique=True, null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    class Meta:
+        verbose_name = 'category'
+        verbose_name_plural = 'categories'
+        db_table = 'categories'
+        ordering = ['-created_at']
+        get_latest_by = 'created_at'
+
+
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.name, allow_unicode=True)
+            super(Categories, self).save(*args, **kwargs)
+
+
+    def __str__(self):
+        return self.name
+
+
+
+
 
 class Products(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
@@ -101,7 +128,7 @@ class Products(models.Model):
     def save(self, *args, **kwargs):
         if not self.slug:
             self.slug = slugify(self.name, allow_unicode=True)
-        super(Products, self).save(*args, **kwargs)
+            super(Products, self).save(*args, **kwargs)
 
 
 
@@ -115,6 +142,7 @@ class Products(models.Model):
 
     def __str__(self):
         return self.name
+
 
 
 

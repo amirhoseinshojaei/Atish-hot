@@ -151,7 +151,7 @@ class Products(models.Model):
     stock = models.IntegerField()
     image = models.ImageField(upload_to='products')
     is_sale = models.BooleanField(default=False)
-    sale_price = models.DecimalField(max_digits=10, decimal_places=0)
+    sale_price = models.DecimalField(max_digits=10, decimal_places=0, null=True, blank=True)
     is_suggestion = models.BooleanField(default=False)
     supplier = models.ForeignKey(Supplier, on_delete=models.CASCADE, null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)

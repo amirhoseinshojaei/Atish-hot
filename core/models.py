@@ -109,6 +109,7 @@ class Products(models.Model):
     slug = models.SlugField(max_length=100, unique=True, null=True, blank=True)
     price = models.DecimalField(max_digits=10, decimal_places=0)
     description = RichTextField()
+    category = models.ForeignKey(Categories, on_delete=models.CASCADE)
     stock = models.IntegerField()
     image = models.ImageField(upload_to='products')
     is_sale = models.BooleanField(default=False)

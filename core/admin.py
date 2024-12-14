@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Categories, Supplier, Products, Orders, OrderItems, User
+from .models import Categories, Supplier, Products, Orders, OrderItems, User, CustomerReview
 
 
 # Register your models here.
@@ -123,6 +123,29 @@ class OrdersAdmin(admin.ModelAdmin):
 
     def has_change_permission(self, request, obj=None):
         return request.user.is_superuser
+
+    def has_view_permission(self, request, obj=None):
+        return request.user.is_superuser or request.user.is_staff
+
+    def has_module_permission(self, request, obj=None):
+        return request.user.is_superuser or request.user.is_staff
+
+
+@admin.register(CustomerReview)
+class CustomerReviewAdmin(admin.ModelAdmin):
+    list_display = ('full_name', 'rating', 'created_at', 'updated_at')
+    list_filter = ('rating',)
+    search_fields = ('full_name',)
+    list_editable = ('rating',)
+
+    def has_add_permission(self, request):
+        return request.user.is_superuser or request.user.is_staff
+
+    def has_delete_permission(self, request, obj=None):
+        return request.user.is_superuser or request.user.is_staff
+
+    def has_change_permission(self, request, obj=None):
+        return request.user.is_superuser or request.user.is_staff
 
     def has_view_permission(self, request, obj=None):
         return request.user.is_superuser or request.user.is_staff

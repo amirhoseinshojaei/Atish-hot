@@ -1,13 +1,13 @@
 from django.contrib import admin
-from . models import Categories, Supplier, Products, Orders, OrderItems, User
-# Register your models here.
+from .models import Categories, Supplier, Products, Orders, OrderItems, User
 
+
+# Register your models here.
 
 
 class OrderItemsInline(admin.TabularInline):
     model = OrderItems
     extra = 1
-
 
 
 @admin.register(User)
@@ -19,23 +19,17 @@ class UserAdmin(admin.ModelAdmin):
     def has_add_permission(self, request):
         return request.user.is_superuser
 
-
     def has_delete_permission(self, request, obj=None):
         return request.user.is_superuser
-
 
     def has_change_permission(self, request, obj=None):
         return request.user.is_superuser
 
-
     def has_view_permission(self, request, obj=None):
         return request.user.is_superuser
 
-
     def has_module_permission(self, request, obj=None):
         return request.user.is_superuser
-
-
 
 
 @admin.register(Categories)
@@ -47,23 +41,17 @@ class CategoriesAdmin(admin.ModelAdmin):
     def has_add_permission(self, request):
         return request.user.is_superuser or request.user.is_staff
 
-
     def has_delete_permission(self, request, obj=None):
         return request.user.is_superuser or request.user.is_staff
-
 
     def has_change_permission(self, request, obj=None):
         return request.user.is_superuser or request.user.is_staff
 
-
     def has_view_permission(self, request, obj=None):
         return request.user.is_superuser or request.user.is_staff
 
-
     def has_module_permission(self, request, obj=None):
         return request.user.is_superuser or request.user.is_staff
-
-
 
 
 @admin.register(Supplier)
@@ -78,21 +66,16 @@ class SupplierAdmin(admin.ModelAdmin):
         return request.user.is_superuser or request.user.is_staff
 
     def has_delete_permission(self, request, obj=None):
-
         return request.user.is_superuser or request.user.is_staff
 
     def has_change_permission(self, request, obj=None):
         return request.user.is_superuser or request.user.is_staff
 
     def has_view_permission(self, request, obj=None):
-
         return request.user.is_superuser or request.user.is_staff
 
     def has_module_permission(self, request, obj=None):
         return request.user.is_superuser or request.user.is_staff
-
-
-
 
 
 @admin.register(Products)
@@ -105,29 +88,20 @@ class ProductsAdmin(admin.ModelAdmin):
     search_fields = ('name', 'slug')
     list_editable = ('is_suggestion', 'is_available', 'is_sale', 'stock')
 
-
     def has_add_permission(self, request):
         return request.user.is_superuser or request.user.is_staff
-
 
     def has_delete_permission(self, request, obj=None):
         return request.user.is_superuser or request.user.is_staff
 
-
     def has_change_permission(self, request, obj=None):
-
         return request.user.is_superuser or request.user.is_staff
 
     def has_view_permission(self, request, obj=None):
         return request.user.is_superuser or request.user.is_staff
 
     def has_module_permission(self, request, obj=None):
-
         return request.user.is_superuser or request.user.is_staff
-
-
-
-
 
 
 @admin.register(Orders)
@@ -141,23 +115,17 @@ class OrdersAdmin(admin.ModelAdmin):
 
     inlines = [OrderItemsInline]
 
-
     def has_add_permission(self, request):
         return request.user.is_superuser
 
     def has_delete_permission(self, request, obj=None):
         return request.user.is_superuser
 
-
     def has_change_permission(self, request, obj=None):
         return request.user.is_superuser
-
 
     def has_view_permission(self, request, obj=None):
         return request.user.is_superuser or request.user.is_staff
 
     def has_module_permission(self, request, obj=None):
         return request.user.is_superuser or request.user.is_staff
-
-
-

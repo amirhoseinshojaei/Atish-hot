@@ -201,7 +201,7 @@ class Orders(models.Model):
     amount_paid = models.DecimalField(max_digits=10, decimal_places=0)
     created_at = models.DateTimeField(auto_now_add=True)
     status = models.CharField(max_length=50, choices=STATUS_ORDERS, default='pending')
-    shipped =models.BooleanField(default=False)
+    shipped = models.BooleanField(default=False)
     date_shipped = models.DateTimeField(null=True, blank=True)
 
     class Meta:
@@ -233,6 +233,30 @@ class OrderItems(models.Model):
 
     def __str__(self):
         return self.order.full_name
+
+
+
+
+
+class CustomerReview(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    full_name = models.CharField(max_length=100)
+    image = models.ImageField(upload_to='reviews')
+    review = RichTextField()
+    rating = models.PositiveIntegerField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        db_table = 'customerreview'
+        ordering = ['-created_at']
+        get_latest_by = 'created_at'
+        verbose_name = 'review'
+        verbose_name_plural = 'reviews'
+
+
+    def __str__(self):
+        return self.full_name
 
 
 
